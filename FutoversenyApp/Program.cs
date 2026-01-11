@@ -14,15 +14,15 @@ namespace FutoversenyApp
     {
         public static void Main()
         {
+
+            // ha létezik a User.json fájl, akkor a menüben jelezze, hogy meg van adva a személyes adat
             bool megadva = false;
             if (File.Exists("User.json"))
             {
                 megadva = true;
             }
 
-            
             string megadvat = "";
-
             if (megadva)
             {
                 megadvat = "(megadava)";
@@ -31,24 +31,84 @@ namespace FutoversenyApp
             CenterEngine.Show(
                 "================= Futó App =================",
                 $"1: Személes Adatok Megadása {megadvat}",
-                "2: Edzés Rögzítése"
+                "2: Edzés Rögzítése",
+                "3: Szerkestés",
+                "4: Törlés",
+                "5: Kilépés"
             );
 
-            CenterEngine.ReadCentered("");
+            string ans = CenterEngine.ReadCentered("");
 
+            switch (ans)
+            {
+                case "1":
+                    SzAdatok();
+                    break;
+                case "2":
+                    Edzes();
+                    break;
+                case "3":
+                    Szerkesztes();
+                    break;
+                case "4":
+                    Torles();
+                    break;
+                default:
+                    CenterEngine.Show("Érvénytelen választás!");
+                    break;
+            }
+
+            Console.ReadLine();
+        }
+
+        static void SzAdatok()
+        {
+            if (File.Exists("User.json"))
+            {
+                CenterEngine.Show("Már meg vannak adva a személyes adatok!");
+                CenterEngine.ReadCentered("");
+                Main();
+            }
+
+            User user = User.UserJsonReader("User.json");
+            string magassag = CenterEngine.ReadCentered("Magasság: ");
+            string tomeg = CenterEngine.ReadCentered("Tömeg: ");
+            string nyugpul = CenterEngine.ReadCentered("Nyugalmi Pulzus: ");
+            string celido = CenterEngine.ReadCentered("Célidő (perc): ");
+            string szuldat = CenterEngine.ReadCentered("Születési Dátum (ÉÉÉÉ.HH.NN): ");
+
+            User ujUser = new User(magassag, tomeg, nyugpul, celido, szuldat);
+            User.JsonWriter(ujUser);
+        }
+
+        static void Edzes()
+        {
             List<Futas> futasok = Futas.RunsJsonReader("futasok.json");
 
-            DateTime datum = Console.ReadLine() != null ? DateTime.Parse(Console.ReadLine()) : DateTime.Now;
-            int tavolsag = int.Parse(Console.ReadLine());
-            string idotartam = Console.ReadLine();
-            int maxpulzus = int.Parse(Console.ReadLine());
+            string input = CenterEngine.ReadCentered("Dátum: ");
+            DateTime datum;
+            if (input == null)
+            {
+                datum = DateTime.Now;
+            }
+            else
+            {
+                datum = DateTime.Parse(input);
+            }
+
+            int tavolsag = int.Parse(CenterEngine.ReadCentered("Távolság: "));
+            string idotartam = CenterEngine.ReadCentered("Időtartam (perc): ");
+            int maxpulzus = int.Parse(CenterEngine.ReadCentered("Maximális Pulzus: "));
 
             Futas ujFutas = new Futas(datum, tavolsag, idotartam, maxpulzus);
             futasok.Add(ujFutas);
             Futas.JsonWriter(futasok);
-
-            Console.WriteLine("hallo");
-            Console.ReadLine();
         }
+
+        static void Szerkesztes()
+        { }
+
+        static void Torles()
+        { }
     }
 }
