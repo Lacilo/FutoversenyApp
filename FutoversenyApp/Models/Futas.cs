@@ -40,7 +40,7 @@ namespace FutoversenyApp.Models
 
         public override string ToString()
         {
-            return $"Dátum: {Datum}, Távolság: {Tavolsag}, Időtartam: {Idotartam}, Maximális pulzus: {Maxpulzus}";
+            return $"Dátum: {Datum}, Távolság: {Tavolsag} m, Időtartam: {Idotartam} perc, Maximális pulzus: {Maxpulzus}";
         }
 
         /// <summary>

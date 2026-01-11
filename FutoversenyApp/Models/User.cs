@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Text.Json;
 
 namespace FutoversenyApp.Models
@@ -9,32 +10,36 @@ namespace FutoversenyApp.Models
         private int tomeg;
         private static int nyugpul;
         private int celido;
+        private DateTime szuldat;
 
-        public User(int magassag, int tomeg, int nyugpul, int celido)
+        public User(int magassag, int tomeg, int nyugpul, int celido, DateTime szuldat)
         {
             Magassag = magassag;
             Tomeg = tomeg;
             Nyugpul = nyugpul;
             Celido = celido;
+            Szuldat = szuldat;
         }
 
-        public User(int[] user)
+        public User(string[] user) // Miért nincs var[] :(
         {
-            Magassag = user[0];
-            Tomeg = user[1];
-            Nyugpul = user[2];
-            Celido = user[3];
+            Magassag = int.Parse(user[0]);
+            Tomeg = int.Parse(user[1]);
+            Nyugpul = int.Parse(user[2]);
+            Celido = int.Parse(user[3]);
+            Szuldat = DateTime.Parse(user[4]);
         }
 
         public User()
         {
-
+            
         }
 
         public int Magassag { get { return magassag; } set { if (value > 0) magassag = value; } }
         public int Tomeg { get { return tomeg; } set { if (value > 0) tomeg = value; } }
         public static int Nyugpul { get { return nyugpul; } set { if (value > 0) nyugpul = value; } }
         public int Celido { get { return celido; } set { if (value > 0) celido = value; } }
+        public DateTime Szuldat { get { return szuldat; } set { if (value < DateTime.Now) szuldat = value; } }
 
         public override string ToString()
         {
