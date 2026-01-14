@@ -1,9 +1,32 @@
-﻿using System;
+﻿using FutoversenyApp.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+
+
+//TESZTELÉSHEZ:
+
+//Display display = new Display();
+
+//List<Futas> futasok = new List<Futas>();
+
+//for (int i = 0; i < 10; i++)
+//{
+//    futasok.Add(new Futas());
+//}
+
+////foreach (var item in futasok)
+////{
+////    Console.WriteLine(item);
+////}
+
+//display.UpdateFutasok(futasok);
+
+//display.DisplayFutasok();
+//display.GetDisplayInput();
 
 namespace FutoversenyApp.Models
 {
@@ -35,6 +58,7 @@ namespace FutoversenyApp.Models
         public void GetDisplayInput()
         {
             ConsoleKeyInfo key = Console.ReadKey();
+            bool exit = false;
 
             while (true)
             {
@@ -47,7 +71,13 @@ namespace FutoversenyApp.Models
                     case ConsoleKey.UpArrow:
                         cursor--;
                         break;
+
+                    case ConsoleKey.Q:
+                        exit = true;
+                        break;
                 }
+
+                if (exit) break;
 
                 Console.Clear();
                 DisplayFutasok();
@@ -70,7 +100,7 @@ namespace FutoversenyApp.Models
                     Console.ForegroundColor = ConsoleColor.White;
                 }
 
-                    Console.WriteLine($"{futas.Datum} | {futas.Tavolsag} | {futas.Idotartam} | {futas.Maxpulzus} ");
+                Console.WriteLine($"{futas.Datum} | {futas.Tavolsag} | {futas.Idotartam} | {futas.Maxpulzus} ");
             }
         }
     }
