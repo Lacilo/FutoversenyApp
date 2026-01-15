@@ -10,7 +10,7 @@ namespace FutoversenyApp.Controllers
     {
         public static void SzAdatok()
         {
-            if (new FileInfo("User.json").Length > 0)
+            if (new FileInfo("User.json").Length > 2)
             {
                 CenterEngine.Show("Már meg vannak adva a személyes adatok!");
                 CenterEngine.ReadCentered("");

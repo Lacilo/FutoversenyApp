@@ -115,7 +115,7 @@ namespace FutoversenyApp
         {
             if (!File.Exists("Runs.json"))
             {
-                File.Create("Runs.json").Close();
+                File.WriteAllText("Runs.json", "[]");
             }
             if (!File.Exists("User.json"))
             {
