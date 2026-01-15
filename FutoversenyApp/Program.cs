@@ -15,11 +15,6 @@ namespace FutoversenyApp
         {
             FilesExist();
 
-            for (int i = 0; i < 50; i++)
-            {
-                futasok.Add(new Futas());
-            }
-
             Menu();
         }
 
