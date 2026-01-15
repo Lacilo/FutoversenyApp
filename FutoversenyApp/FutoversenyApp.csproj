@@ -75,7 +75,7 @@
   <ItemGroup>
     <Compile Include="Controllers\Controller.cs" />
     <Compile Include="Models\CenterEngine.cs" />
-    <Compile Include="Models\Display.cs" />
+    <Compile Include="Views\Display.cs" />
     <Compile Include="Models\Futas.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Program.cs" />

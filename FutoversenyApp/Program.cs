@@ -17,6 +17,7 @@ namespace FutoversenyApp
             {
                 futasok.Add(new Futas());
             }
+
             Menu();
         }
 
