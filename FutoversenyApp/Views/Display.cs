@@ -88,9 +88,11 @@ namespace FutoversenyApp.Models
 
                     case ConsoleKey.Delete:
                         Controller.Torles(Futasok, currentDisplay);
+                        break;
 
                     case ConsoleKey.E:
                         Controller.Szerkesztes(Futasok, currentDisplay);
+                        break;
 
                     case ConsoleKey.Escape:
                         exit = true;
