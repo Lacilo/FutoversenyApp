@@ -50,22 +50,31 @@ namespace FutoversenyApp.Controllers
         /// <summary>
         /// Újra bekéri az edzés adatait, majd új objektumot hoz létre a régi edzés helyén
         /// </summary>
-        public static void Szerkesztes(List<Futas> futasok)
+        public static void Szerkesztes(List<Futas> futasok, int kivalasztott)
         {
-            for (int i = 0; i < futasok.Count; i++)
-            {
-                Console.WriteLine(futasok[i]);
-            }
-            int kivalasztott = int.Parse(CenterEngine.ReadCentered("Index: "));
-
             string datum = CenterEngine.ReadCentered("Dátum: ");
             if (datum == "")
             {
-                datum = DateTime.Now.ToString();
+                datum = futasok[kivalasztott].Datum.ToString();
             }
-            string tavolsag = CenterEngine.ReadCentered("Távolság: ");
+
+            string tavolsag = CenterEngine.ReadCentered("Távolság (m): ");
+            if (tavolsag == "")
+            {
+                tavolsag = futasok[kivalasztott].Tavolsag.ToString();
+            }
+
             string idotartam = CenterEngine.ReadCentered("Időtartam (perc): ");
+            if (idotartam == "")
+            {
+                idotartam = futasok[kivalasztott].Idotartam;
+            }
+
             string maxpulzus = CenterEngine.ReadCentered("Maximális Pulzus: ");
+            if (maxpulzus == "")
+            {
+                maxpulzus = futasok[kivalasztott].Maxpulzus.ToString();
+            }
 
             Futas ujFutas = new Futas(datum, tavolsag, idotartam, maxpulzus);
             futasok[kivalasztott] = ujFutas;
@@ -75,14 +84,8 @@ namespace FutoversenyApp.Controllers
         /// <summary>
         /// Kitörli a kiválasztott edzést
         /// </summary>
-        public static void Torles(List<Futas> futasok)
+        public static void Torles(List<Futas> futasok, int kivalasztott)
         {
-            for (int i = 0; i < futasok.Count; i++)
-            {
-                Console.WriteLine(futasok[i]);
-            }
-            int kivalasztott = int.Parse(CenterEngine.ReadCentered("Index: "));
-
             futasok.RemoveAt(kivalasztott);
             Futas.JsonWriter(futasok);
         }
