@@ -33,8 +33,10 @@ namespace FutoversenyApp.Models
     internal class Display
     {
         private List<Futas> futasok;
-
         int cursor;
+        int posOnPage;
+        int page;
+        int currentDisplay = 0;
 
         internal List<Futas> Futasok { get => futasok; set => futasok = value; }
         public int Cursor { get => cursor; set => cursor = value; }
@@ -60,53 +62,90 @@ namespace FutoversenyApp.Models
             ConsoleKeyInfo key = Console.ReadKey();
             bool exit = false;
 
+            int page = 0;
+            int allPage = (int)(Futasok.Count/10);
+
             while (true)
             {
                 switch (key.Key)
                 {
                     case ConsoleKey.DownArrow:
-                        cursor++;
+                        posOnPage++;
                         break;
 
                     case ConsoleKey.UpArrow:
-                        cursor--;
+                        posOnPage--;
+                        break;
+
+                    case ConsoleKey.LeftArrow:
+                        page--;
+                        posOnPage = 0;
+                        break;
+
+                    case ConsoleKey.RightArrow:
+                        page++;
+                        posOnPage = 0;
                         break;
 
                     case ConsoleKey.Q:
                         exit = true;
+                        Program.Menu();
                         break;
                 }
-
-                if (exit) break;
-
-                Console.Clear();
-                DisplayFutasok();
+                currentDisplay = (page * 10) + posOnPage;
+                
+                DisplayFutasok(page*10);
+                DisplayDataOfSelectedRun();
+                Console.SetCursorPosition(0, 10);
+                Console.BackgroundColor = ConsoleColor.White;
+                Console.ForegroundColor = ConsoleColor.Black;
+                Console.WriteLine($"\n   Oldal: {page + 1} / {allPage} | Jelenlegi elem: {currentDisplay + 1}");
+                Console.BackgroundColor = ConsoleColor.Black;
+                Console.ForegroundColor = ConsoleColor.White;
+                // Console.WriteLine($"{page}\n{posOnPage}\nettől: {page*10}\njelenlegi: {currentDisplay}");
                 key = Console.ReadKey();
             }
         }
 
-        public void DisplayFutasok()
+        public void DisplayFutasok(int fromThisPos)
         {
-            foreach (Futas futas in Futasok)
+            Console.Clear();
+
+            for (int i = fromThisPos; i < fromThisPos+10; i++)
             {
-                if (cursor == Futasok.IndexOf(futas)) 
+                if (currentDisplay == i) 
                 {
-                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.ForegroundColor = ConsoleColor.Black;
+                    Console.BackgroundColor = ConsoleColor.White;
                     Console.Write("-> ");                    
                 }
                 else
-                {
-                    Console.Write("   ");
+                {                    
                     Console.ForegroundColor = ConsoleColor.White;
+                    Console.BackgroundColor = ConsoleColor.Black;
+                    Console.Write("   ");
                 }
 
-                Console.WriteLine($"{futas.Datum} | {futas.Tavolsag} | {futas.Idotartam} | {futas.Maxpulzus} ");
+                Console.WriteLine($"{Futasok[i].Datum} | {Futasok[i].Tavolsag} | {Futasok[i].Idotartam} | {Futasok[i].Maxpulzus} ");
             }
         }
 
         public void DisplayDataOfSelectedRun()
         {
+            Console.BackgroundColor = ConsoleColor.Black;
+            Console.ForegroundColor = ConsoleColor.White;
 
+            Console.SetCursorPosition( 70, 3 );
+            Console.Write($"Futás Dátuma: {Futasok[cursor].Datum}");
+
+            Console.SetCursorPosition(70, 4);
+            Console.Write($"Lefutott távolság: {Futasok[cursor].Tavolsag}");
+
+            Console.SetCursorPosition(70, 5);
+            Console.Write($"Futás Időtartama: {Futasok[cursor].Idotartam}");
+
+            Console.SetCursorPosition(70, 6);
+            Console.Write($"Legmagasabb pulzus érték: {Futasok[cursor].Maxpulzus}");
         }
     }
 }

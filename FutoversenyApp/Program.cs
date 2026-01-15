@@ -9,12 +9,17 @@ namespace FutoversenyApp
     internal class Program
     {
         public static List<Futas> futasok = new List<Futas>();
-        public static void Main()
+        public static Display display = new Display();
+        public static void Main() 
         {
+            for (int i = 0; i < 50; i++)
+            {
+                futasok.Add(new Futas());
+            }
             Menu();
         }
 
-        static void Menu()
+        public static void Menu()
         {
             // ha létezik a User.json fájl, akkor a menüben jelezze, hogy meg van adva a személyes adat
             bool megadva = false;
@@ -50,7 +55,9 @@ namespace FutoversenyApp
                     Edzes();
                     break;
                 case "3":
-                    // Edzések Megjelenítése function
+                    display.UpdateFutasok(futasok);
+                    display.DisplayFutasok(0);
+                    display.GetDisplayInput();
                     break;
                 case "4":
                     Szerkesztes();
