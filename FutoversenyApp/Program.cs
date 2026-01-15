@@ -62,6 +62,8 @@ namespace FutoversenyApp
             }
 
             Console.ReadLine();
+            */
+            
         }
         static void SzAdatok()
         {
