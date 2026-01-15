@@ -103,5 +103,10 @@ namespace FutoversenyApp.Models
                 Console.WriteLine($"{futas.Datum} | {futas.Tavolsag} | {futas.Idotartam} | {futas.Maxpulzus} ");
             }
         }
+
+        public void DisplayDataOfSelectedRun()
+        {
+
+        }
     }
 }
