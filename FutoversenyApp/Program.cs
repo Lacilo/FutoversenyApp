@@ -10,13 +10,20 @@ namespace FutoversenyApp
     internal class Program
     {
         public static List<Futas> futasok = new List<Futas>();
-        public static void Main()
+        public static Display display = new Display();
+        public static void Main() 
         {
             FilesExist();
+
+            for (int i = 0; i < 50; i++)
+            {
+                futasok.Add(new Futas());
+            }
+
             Menu();
         }
 
-        static void Menu()
+        public static void Menu()
         {
             // ha létezik a User.json fájl, akkor a menüben jelezze, hogy meg van adva a személyes adat
             bool megadva = false;
@@ -52,7 +59,9 @@ namespace FutoversenyApp
                     Controller.Edzes();
                     break;
                 case "3":
-                    // Edzések Megjelenítése function
+                    display.UpdateFutasok(futasok);
+                    display.DisplayFutasok(0);
+                    display.GetDisplayInput();
                     break;
                 case "4":
                     Controller.Szerkesztes();
@@ -92,6 +101,9 @@ namespace FutoversenyApp
             }
         }
 
+        /// <summary>
+        /// Megnézi hogy léteznek-e a kellő fájlok, létrehozza ha nem.
+        /// </summary>
         static void FilesExist()
         {
             if (!File.Exists("Runs.json"))
