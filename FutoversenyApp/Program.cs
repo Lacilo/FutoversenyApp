@@ -113,7 +113,7 @@ namespace FutoversenyApp
         /// </summary>
         static void FilesExist()
         {
-            if (!File.Exists("Runs.json"))
+            if (!File.Exists("Runs.json") || new FileInfo("Runs.json").Length == 0)
             {
                 File.WriteAllText("Runs.json", "[]");
             }
