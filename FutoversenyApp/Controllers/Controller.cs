@@ -51,6 +51,9 @@ namespace FutoversenyApp.Controllers
             Futas.JsonWriter(futasok);
         }
 
+        /// <summary>
+        /// Újra bekéri az edzés adatait, majd új objektumot hoz létre a régi edzés helyén
+        /// </summary>
         public static void Szerkesztes()
         {
             List<Futas> futasok = new List<Futas>();
@@ -80,6 +83,9 @@ namespace FutoversenyApp.Controllers
             Futas.JsonWriter(futasok);
         }
 
+        /// <summary>
+        /// Kitörli a kiválasztott edzést
+        /// </summary>
         public static void Torles()
         {
             List<Futas> futasok = new List<Futas>();
