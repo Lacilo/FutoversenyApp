@@ -15,10 +15,10 @@ namespace FutoversenyApp
 {
     internal class Program
     {
-        public static ConsoleColor background = ConsoleColor.Cyan;
-        public static ConsoleColor textcolor = ConsoleColor.Black;
-        public static ConsoleColor highlight = ConsoleColor.Red;
-        public static ConsoleColor highlightText = ConsoleColor.White;
+        public static ConsoleColor background = ConsoleColor.Black;
+        public static ConsoleColor textcolor = ConsoleColor.White;
+        public static ConsoleColor highlight = ConsoleColor.White;
+        public static ConsoleColor highlightText = ConsoleColor.Black;
 
         public static List<Futas> futasok = new List<Futas>();
         public static Display display = new Display();
@@ -56,6 +56,7 @@ namespace FutoversenyApp
                 $"Személyes Adatok {megadvat}",
                 "Edzés Rögzítése",
                 "Edzések Kezelése",
+                "Beállítások",
                 "Kilépés"
             };
 
@@ -63,7 +64,7 @@ namespace FutoversenyApp
 
             while (true)
             {
-                DrawMenu(items, selected);
+                MenuDrawer("================= Futó App =================", items, selected);
 
                 ConsoleKey key = Console.ReadKey(true).Key;
 
@@ -109,6 +110,9 @@ namespace FutoversenyApp
                     display.GetDisplayInput();
                     break;
                 case 3:
+                    Settings();
+                    break;
+                case 4:
                     Exit();
                     break;
             }
@@ -122,7 +126,7 @@ namespace FutoversenyApp
 
             while (true)
             {
-                DrawMenu(items, selected);
+                MenuDrawer("================= Futó App =================",items, selected);
 
                 ConsoleKey key = Console.ReadKey(true).Key;
 
@@ -160,13 +164,13 @@ namespace FutoversenyApp
             }
         }
 
-        static void DrawMenu(string[] items, int selected)
+        static void MenuDrawer(string title, string[] items, int selected)
         {
             Console.Clear();
 
             Console.BackgroundColor = background;
             Console.ForegroundColor = textcolor;
-            CenterEngine.CenterLine("================= Futó App =================");
+            CenterEngine.CenterLine(title);
             Console.WriteLine();
 
             for (int i = 0; i < items.Length; i++)
@@ -185,6 +189,95 @@ namespace FutoversenyApp
                 CenterEngine.CenterLine($"{items[i]}");
             }
             Console.ResetColor();
+        }
+
+        static void Settings() 
+        {
+            Console.BackgroundColor = background;
+            Console.Clear();
+            Console.BackgroundColor = background;
+            Console.ForegroundColor = textcolor;
+            //témák váltása
+
+            string[] items =
+            {
+                "Fekete-Fehér (default)",
+                "Cián-Piros",
+                "1",
+                "2",
+                "Főmenü"
+            };
+
+            int selected = 0;
+
+            while (true)
+            {
+                MenuDrawer("================= Témák: =================",items, selected);
+
+                ConsoleKey key = Console.ReadKey(true).Key;
+
+                if (key == ConsoleKey.Tab || key == ConsoleKey.DownArrow)
+                {
+                    selected = (selected + 1) % items.Length;
+                    Console.BackgroundColor = background;
+                }
+                else if (key == ConsoleKey.UpArrow)
+                {
+                    selected = (selected - 1 + items.Length) % items.Length;
+                    Console.BackgroundColor = background;
+                }
+                else if (key == ConsoleKey.Enter)
+                {
+                    break;
+                }
+                else if (key == ConsoleKey.Escape)
+                {
+                    return;
+                }
+            }
+
+            switch (selected)
+            {
+                case 0:
+                    background = ConsoleColor.Black;
+                    textcolor = ConsoleColor.White;
+                    highlight = ConsoleColor.White;
+                    highlightText = ConsoleColor.Black;
+                    Console.BackgroundColor = background;
+                    Console.ForegroundColor = textcolor;
+                    Settings();
+                    break;
+                case 1:
+                    background = ConsoleColor.Cyan;
+                    textcolor = ConsoleColor.Black;
+                    highlight = ConsoleColor.Red;
+                    highlightText = ConsoleColor.White;
+                    Console.BackgroundColor = background;
+                    Console.ForegroundColor = textcolor;
+                    Settings();
+                    break;
+                case 2:
+                    background = ConsoleColor.Black;
+                    textcolor = ConsoleColor.White;
+                    highlight = ConsoleColor.White;
+                    highlightText = ConsoleColor.Black;
+                    Console.BackgroundColor = background;
+                    Console.ForegroundColor = textcolor;
+                    Settings();
+                    break;
+                case 3:
+                    background = ConsoleColor.Black;
+                    textcolor = ConsoleColor.White;
+                    highlight = ConsoleColor.White;
+                    highlightText = ConsoleColor.Black;
+                    Console.BackgroundColor = background;
+                    Console.ForegroundColor = textcolor;
+                    Settings();
+                    break;
+                case 4:
+                    Main();
+                    break;
+            }
         }
 
         /// <summary>
