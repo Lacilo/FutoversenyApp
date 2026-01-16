@@ -33,10 +33,18 @@ namespace FutoversenyApp.Models
 
         }
 
+        public void SetUserValues(int tomeg, int nyugpul)
+        {
+            Tomeg = tomeg;
+            Nyugpul = nyugpul;
+        }
+
         public DateTime Datum { get { return datum; } set { if (value <= DateTime.Now) datum = value; } }
         public int Tavolsag { get { return tavolsag; } set { if (value > 0) tavolsag = value; } }
         public string Idotartam { get => idotartam; set => idotartam = value; } // Ezzel még nem tudom mi lesz, marad így
-        public int Maxpulzus { get { return maxpulzus; } set { if (value > User.Nyugpul) maxpulzus = value; else User.Nyugpul = value; } }
+        public int Maxpulzus { get { return maxpulzus; } set { if (value > Nyugpul) maxpulzus = value; else maxpulzus = Nyugpul; } }
+        public int Tomeg { get ; set; }
+        public int Nyugpul { get; set; }
 
         public override string ToString()
         {
@@ -72,7 +80,10 @@ namespace FutoversenyApp.Models
 
         public static float AtlagSebesseg(Futas futas)
         {
-            float atlagsebesseg = (float)futas.Tavolsag / float.Parse(futas.Idotartam  60);
+            // óó:pp:mm, return m/s érték, * 3.6 ha km/h
+            string[] ido = futas.Idotartam.Split(':');
+            int timeInSeconds = (int.Parse(ido[0]) * 60 * 60) + (int.Parse(ido[1]) * 60) + int.Parse(ido[2]);
+            float atlagsebesseg = (float)futas.Tavolsag / (float)timeInSeconds;
             return atlagsebesseg;
         }
     }

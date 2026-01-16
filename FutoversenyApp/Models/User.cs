@@ -8,7 +8,7 @@ namespace FutoversenyApp.Models
     {
         private int magassag;
         private int tomeg;
-        private static int nyugpul;
+        private int nyugpul;
         private int celido;
         private DateTime szuldat;
 
@@ -19,6 +19,7 @@ namespace FutoversenyApp.Models
             Nyugpul = int.Parse(nyugpul);
             Celido = int.Parse(celido);
             Szuldat = DateTime.Parse(szuldat);
+            new Futas().SetUserValues(int.Parse(tomeg), int.Parse(nyugpul));
         }
 
         public User(string[] user)
@@ -35,9 +36,15 @@ namespace FutoversenyApp.Models
             
         }
 
+        public User(int tomeg, int nyugpul)
+        {
+            Tomeg = tomeg;
+            Nyugpul = nyugpul;
+        }
+
         public int Magassag { get { return magassag; } set { if (value > 0) magassag = value; } }
         public int Tomeg { get { return tomeg; } set { if (value > 0) tomeg = value; } }
-        public static int Nyugpul { get { return nyugpul; } set { if (value > 0) nyugpul = value; } }
+        public int Nyugpul { get { return nyugpul; } set { if (value > 0) nyugpul = value; } }
         public int Celido { get { return celido; } set { if (value > 0) celido = value; } }
         public DateTime Szuldat { get { return szuldat; } set { if (value < DateTime.Now) szuldat = value; } }
 
