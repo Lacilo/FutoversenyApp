@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using FutoversenyApp.Controllers;
+using FutoversenyApp;
+using System.Runtime.InteropServices;
 
 
 //TESZTELÉSHEZ:
@@ -93,7 +95,6 @@ namespace FutoversenyApp.Models
                         page++;
                         posOnPage = 0;
                         break;
-
                     case ConsoleKey.Delete:
                         Controller.Torles(Futasok, currentDisplay);
                         break;
@@ -112,11 +113,11 @@ namespace FutoversenyApp.Models
                 DisplayFutasok(page * 10);
                 DisplayDataOfSelectedRun();
                 Console.SetCursorPosition(0, 10);
-                Console.BackgroundColor = ConsoleColor.White;
-                Console.ForegroundColor = ConsoleColor.Black;
+                Console.BackgroundColor = Program.highlight;
+                Console.ForegroundColor = Program.highlightText;
                 Console.WriteLine($"\n   Oldal: {page + 1} / {allPage} | Jelenlegi elem: {currentDisplay + 1}   ");
-                Console.BackgroundColor = ConsoleColor.Black;
-                Console.ForegroundColor = ConsoleColor.White;
+                Console.BackgroundColor = Program.background;
+                Console.ForegroundColor = Program.textcolor;
                 Console.WriteLine("Szerkesztés: e\t Törlés: Delete");
                 // Console.WriteLine($"{page}\n{posOnPage}\nettől: {page*10}\njelenlegi: {currentDisplay}");
                 key = Console.ReadKey();
@@ -125,6 +126,7 @@ namespace FutoversenyApp.Models
 
         public void DisplayFutasok(int fromThisPos)
         {
+            Console.BackgroundColor = Program.background;
             Console.Clear();
             int until = 0;
 
@@ -136,14 +138,14 @@ namespace FutoversenyApp.Models
                 {
                     if (currentDisplay == i)
                     {
-                        Console.ForegroundColor = ConsoleColor.Black;
-                        Console.BackgroundColor = ConsoleColor.White;
+                        Console.ForegroundColor = Program.highlightText;
+                        Console.BackgroundColor = Program.highlight;
                         Console.Write("-> ");
                     }
                     else
                     {
-                        Console.ForegroundColor = ConsoleColor.White;
-                        Console.BackgroundColor = ConsoleColor.Black;
+                        Console.ForegroundColor = Program.textcolor;
+                        Console.BackgroundColor = Program.background;
                         Console.Write("   ");
                     }
 
@@ -160,8 +162,8 @@ namespace FutoversenyApp.Models
 
         public void DisplayDataOfSelectedRun()
         {
-            Console.BackgroundColor = ConsoleColor.Black;
-            Console.ForegroundColor = ConsoleColor.White;
+            Console.BackgroundColor = Program.background;
+            Console.ForegroundColor = Program.textcolor;
 
             Console.SetCursorPosition(70, 3);
             Console.Write($"Futás Dátuma: {Futasok[currentDisplay].Datum}");
