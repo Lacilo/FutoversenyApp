@@ -109,7 +109,7 @@ namespace FutoversenyApp.Models
                 Console.WriteLine($"\n   Oldal: {page + 1} / {allPage} | Jelenlegi elem: {currentDisplay + 1}   ");
                 Console.BackgroundColor = ConsoleColor.Black;
                 Console.ForegroundColor = ConsoleColor.White;
-                Console.WriteLine("Szerkesztés: e\t Törlés: t");
+                Console.WriteLine("Szerkesztés: e\t Törlés: Delete");
                 // Console.WriteLine($"{page}\n{posOnPage}\nettől: {page*10}\njelenlegi: {currentDisplay}");
                 key = Console.ReadKey();
             }
