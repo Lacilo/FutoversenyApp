@@ -36,62 +36,6 @@ namespace FutoversenyApp
             Menu();
         }
 
-        //static void Menu()
-        //{
-        //    // ha létezik a User.json fájl, akkor a menüben jelezze, hogy meg van adva a személyes adat
-        //    bool megadva = false;
-        //    if (File.Exists("User.json"))
-        //    {
-        //        megadva = true;
-        //    }
-
-        //    string megadvat = "";
-        //    if (megadva)
-        //    {
-        //        megadvat = "(megadava)";
-        //    }
-
-        //    CenterEngine.Show(
-        //        "================= Futó App =================",
-        //        $"1: Személes Adatok Megadása {megadvat}",
-        //        "2: Edzés Rögzítése",
-        //        "3: Edzések Megjelenítése",
-        //        "4: Szerkestés",
-        //        "5: Törlés",
-        //        "6: Kilépés"
-        //    );
-
-        //    string ans = CenterEngine.ReadCentered("");
-
-        //    switch (ans)
-        //    {
-        //        case "1":
-        //            Controller.SzAdatok();
-        //            break;
-        //        case "2":
-        //            Controller.Edzes();
-        //            break;
-        //        case "3":
-        //            // Edzések Megjelenítése function
-        //            break;
-        //        case "4":
-        //            Controller.Szerkesztes();
-        //            break;
-        //        case "5":
-        //            Controller.Torles();
-        //            break;
-        //        case "6":
-        //            Exit();
-        //            break;
-        //        default:
-        //            CenterEngine.Show("Érvénytelen választás!");
-        //            break;
-        //    }
-
-        //    Console.ReadLine();
-
-        //}
-
         public static void Menu()
         {
             // ha létezik a User.json fájl, akkor a menüben jelezze, hogy meg van adva a személyes adat
@@ -101,19 +45,17 @@ namespace FutoversenyApp
                 megadva = true;
             }
 
-            string megadvat = "";
+            string megadvat = "Megadása";
             if (megadva)
             {
-                megadvat = "(megadava)";
+                megadvat = "Szerkesztése";
             }
 
             string[] items =
             {
-                $"Személyes Adatok Megadása {megadvat}",
+                $"Személyes Adatok {megadvat}",
                 "Edzés Rögzítése",
-                "Edzések Megjelenítése",
-                "Szerkesztés",
-                "Törlés",
+                "Edzések Kezelése",
                 "Kilépés"
             };
 
@@ -148,8 +90,16 @@ namespace FutoversenyApp
             switch (selected)
             {
                 case 0:
-                    Controller.SzAdatok();
-                    break;
+                    if (megadva)
+                    {
+                        Controller.SzAdatokSzerk();
+                        break;
+                    }
+                    else
+                    {
+                        Controller.SzAdatok();
+                        break;
+                    }
                 case 1:
                     Controller.Edzes(futasok);
                     break;
@@ -159,17 +109,10 @@ namespace FutoversenyApp
                     display.GetDisplayInput();
                     break;
                 case 3:
-                    Controller.Szerkesztes(futasok, 0);
-                    break;
-                case 4:
-                    Controller.Torles(futasok, 0);
-                    break;
-                case 5:
                     Exit();
                     break;
             }
         }
-
 
         static void Exit()
         {
@@ -216,30 +159,6 @@ namespace FutoversenyApp
                     break;
             }
         }
-
-        //static void DrawMenu(string[] items, int selected)
-        //{
-        //    Console.Clear();
-
-        //    Console.BackgroundColor = background;
-        //    Console.ForegroundColor = textcolor;
-
-        //    CenterEngine.CenterLine("================= Futó App =================");
-
-        //    Console.WriteLine();
-
-        //    for (int i = 0; i < items.Length; i++)
-        //    {
-        //        if (i == selected)
-        //            Console.ForegroundColor = highlight;
-        //        else
-        //            Console.ForegroundColor = textcolor;
-
-        //        CenterEngine.CenterLine($"{i + 1}: {items[i]}");
-        //    }
-
-        //    Console.ResetColor();
-        //}
 
         static void DrawMenu(string[] items, int selected)
         {
