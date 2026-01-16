@@ -1,19 +1,102 @@
-﻿using System;
+﻿// TODO:
+// - Előzőleges terv (ami kész arra is)
+// - Dokumentáció
+// - Pulzus időbeli változása
+// - Átlagsebesség időbeli változása
+
+using System;
 using System.Collections.Generic;
-using FutoversenyApp.Models;
 using System.IO;
+using FutoversenyApp.Models;
+using FutoversenyApp.Controllers;
 using menu.Models;
 
 namespace FutoversenyApp
 {
     internal class Program
     {
+        public static ConsoleColor background = ConsoleColor.Cyan;
+        public static ConsoleColor textcolor = ConsoleColor.Black;
+        public static ConsoleColor highlight = ConsoleColor.Red;
+        public static ConsoleColor highlightText = ConsoleColor.White;
+
+        public static List<Futas> futasok = new List<Futas>();
+        public static Display display = new Display();
         public static void Main()
         {
+            Console.BackgroundColor = background;
+            FilesExist();
 
+            //for (int i = 0; i < 50; i++)
+            //{
+            //    futasok.Add(new Futas());
+            //}
+            futasok = Futas.RunsJsonReader("Runs.json");
+
+            Menu();
+        }
+
+        //static void Menu()
+        //{
+        //    // ha létezik a User.json fájl, akkor a menüben jelezze, hogy meg van adva a személyes adat
+        //    bool megadva = false;
+        //    if (File.Exists("User.json"))
+        //    {
+        //        megadva = true;
+        //    }
+
+        //    string megadvat = "";
+        //    if (megadva)
+        //    {
+        //        megadvat = "(megadava)";
+        //    }
+
+        //    CenterEngine.Show(
+        //        "================= Futó App =================",
+        //        $"1: Személes Adatok Megadása {megadvat}",
+        //        "2: Edzés Rögzítése",
+        //        "3: Edzések Megjelenítése",
+        //        "4: Szerkestés",
+        //        "5: Törlés",
+        //        "6: Kilépés"
+        //    );
+
+        //    string ans = CenterEngine.ReadCentered("");
+
+        //    switch (ans)
+        //    {
+        //        case "1":
+        //            Controller.SzAdatok();
+        //            break;
+        //        case "2":
+        //            Controller.Edzes();
+        //            break;
+        //        case "3":
+        //            // Edzések Megjelenítése function
+        //            break;
+        //        case "4":
+        //            Controller.Szerkesztes();
+        //            break;
+        //        case "5":
+        //            Controller.Torles();
+        //            break;
+        //        case "6":
+        //            Exit();
+        //            break;
+        //        default:
+        //            CenterEngine.Show("Érvénytelen választás!");
+        //            break;
+        //    }
+
+        //    Console.ReadLine();
+
+        //}
+
+        public static void Menu()
+        {
             // ha létezik a User.json fájl, akkor a menüben jelezze, hogy meg van adva a személyes adat
             bool megadva = false;
-            if (File.Exists("User.json"))
+            if (new FileInfo("User.json").Length > 0)
             {
                 megadva = true;
             }
@@ -24,161 +107,179 @@ namespace FutoversenyApp
                 megadvat = "(megadava)";
             }
 
-            CenterEngine.Show(
-                "================= Futó App =================",
-                $"1: Személes Adatok Megadása {megadvat}",
-                "2: Edzés Rögzítése",
-                "3: Szerkestés",
-                "4: Törlés",
-                "5: Kilépés"
-            );
-
-            string ans = CenterEngine.ReadCentered("");
-
-            switch (ans)
+            string[] items =
             {
-                case "1":
-                    SzAdatok();
+                $"Személyes Adatok Megadása {megadvat}",
+                "Edzés Rögzítése",
+                "Edzések Megjelenítése",
+                "Szerkesztés",
+                "Törlés",
+                "Kilépés"
+            };
+
+            int selected = 0;
+
+            while (true)
+            {
+                DrawMenu(items, selected);
+
+                ConsoleKey key = Console.ReadKey(true).Key;
+
+                if (key == ConsoleKey.Tab || key == ConsoleKey.DownArrow)
+                {
+                    selected = (selected + 1) % items.Length;
+                    Console.BackgroundColor = background;
+                }
+                else if (key == ConsoleKey.UpArrow)
+                {
+                    selected = (selected - 1 + items.Length) % items.Length;
+                    Console.BackgroundColor = background;
+                }
+                else if (key == ConsoleKey.Enter)
+                {
                     break;
-                case "2":
-                    Edzes();
+                }
+                else if (key == ConsoleKey.Escape)
+                {
+                    return;
+                }
+            }
+
+            switch (selected)
+            {
+                case 0:
+                    Controller.SzAdatok();
                     break;
-                case "3":
-                    Szerkesztes();
+                case 1:
+                    Controller.Edzes(futasok);
                     break;
-                case "4":
-                    Torles();
+                case 2:
+                    display.UpdateFutasok(futasok);
+                    display.DisplayFutasok(0);
+                    display.GetDisplayInput();
                     break;
-                case "5":
+                case 3:
+                    Controller.Szerkesztes(futasok, 0);
+                    break;
+                case 4:
+                    Controller.Torles(futasok, 0);
+                    break;
+                case 5:
                     Exit();
                     break;
-                default:
-                    CenterEngine.Show("Érvénytelen választás!");
-                    break;
             }
-
-            Console.ReadLine();
-            
-        }
-        static void SzAdatok()
-        {
-            if (File.Exists("User.json"))
-            {
-                CenterEngine.Show("Már meg vannak adva a személyes adatok!");
-                CenterEngine.ReadCentered("");
-                Main();
-            }
-
-            User user = User.UserJsonReader("User.json");
-            string magassag = CenterEngine.ReadCentered("Magasság: ");
-            string tomeg = CenterEngine.ReadCentered("Tömeg: ");
-            string nyugpul = CenterEngine.ReadCentered("Nyugalmi Pulzus: ");
-            string celido = CenterEngine.ReadCentered("Célidő (perc): ");
-            string szuldat = CenterEngine.ReadCentered("Születési Dátum (ÉÉÉÉ.HH.NN): ");
-
-            User ujUser = new User(magassag, tomeg, nyugpul, celido, szuldat);
-            User.JsonWriter(ujUser);
         }
 
-        static void Edzes()
-        {
-            List<Futas> futasok = new List<Futas>();
-
-            if (new FileInfo("Runs.json").Length > 0)
-            {
-                futasok = Futas.RunsJsonReader("Runs.json");
-            }
-
-            string input = CenterEngine.ReadCentered("Dátum: ");
-            DateTime datum;
-            if (input == "")
-            {
-                datum = DateTime.Now;
-            }
-            else
-            {
-                datum = DateTime.Parse(input);
-            }
-
-            int tavolsag = int.Parse(CenterEngine.ReadCentered("Távolság: "));
-            string idotartam = CenterEngine.ReadCentered("Időtartam (perc): ");
-            int maxpulzus = int.Parse(CenterEngine.ReadCentered("Maximális Pulzus: "));
-
-            Futas ujFutas = new Futas(datum, tavolsag, idotartam, maxpulzus);
-            futasok.Add(ujFutas);
-            Futas.JsonWriter(futasok);
-        }
-
-        static void Szerkesztes()
-        {
-            List<Futas> futasok = new List<Futas>();
-
-            if (new FileInfo("Runs.json").Length > 0)
-            {
-                futasok = Futas.RunsJsonReader("Runs.json");
-            }
-
-            for (int i = 0; i < futasok.Count; i++)
-            {
-                Console.WriteLine(futasok[i]);
-            }
-            int kivalasztott = int.Parse(CenterEngine.ReadCentered("Index: "));
-
-            string input = CenterEngine.ReadCentered("Dátum: ");
-            DateTime datum;
-            if (input == null)
-            {
-                datum = DateTime.Now;
-            }
-            else
-            {
-                datum = DateTime.Parse(input);
-            }
-
-            int tavolsag = int.Parse(CenterEngine.ReadCentered("Távolság: "));
-            string idotartam = CenterEngine.ReadCentered("Időtartam (perc): ");
-            int maxpulzus = int.Parse(CenterEngine.ReadCentered("Maximális Pulzus: "));
-
-            Futas ujFutas = new Futas(datum, tavolsag, idotartam, maxpulzus);
-            futasok[kivalasztott] = ujFutas;
-            Futas.JsonWriter(futasok);
-        }
-
-        static void Torles()
-        {
-            List<Futas> futasok = new List<Futas>();
-
-            if (new FileInfo("Runs.json").Length > 0)
-            {
-                futasok = Futas.RunsJsonReader("Runs.json");
-            }
-            for (int i = 0; i < futasok.Count; i++)
-            {
-                Console.WriteLine(futasok[i]);
-            }
-            int kivalasztott = int.Parse(CenterEngine.ReadCentered("Index: "));
-
-            futasok.RemoveAt(kivalasztott);
-            Futas.JsonWriter(futasok);
-        }
 
         static void Exit()
         {
-            CenterEngine.Show(
-                "================= Futó App =================",
-                "1: Igen",
-                "2: Nem"
-            );
-            string ans = CenterEngine.ReadCentered("");
+            Console.BackgroundColor = background;
+            string[] items = { "Igen", "Nem" };
+            int selected = 0;
 
-            switch (ans)
+            while (true)
             {
-                case "1":
+                DrawMenu(items, selected);
+
+                ConsoleKey key = Console.ReadKey(true).Key;
+
+                if (key == ConsoleKey.Tab || key == ConsoleKey.DownArrow)
+                {
+                    selected = (selected + 1) % items.Length;
+                    Console.BackgroundColor = background;
+                }
+
+                else if (key == ConsoleKey.UpArrow)
+                {
+                    selected = (selected - 1 + items.Length) % items.Length;
+                    Console.BackgroundColor = background;
+                }
+
+                else if (key == ConsoleKey.Enter)
+                {
+                    break;
+                }
+                else if (key == ConsoleKey.Escape)
+                {
+                    Main();
+                    return;
+                }
+            }
+
+            switch (selected)
+            {
+                case 0:
                     Environment.Exit(0);
                     break;
-                case "2":
+                case 1:
                     Main();
                     break;
+            }
+        }
+
+        //static void DrawMenu(string[] items, int selected)
+        //{
+        //    Console.Clear();
+
+        //    Console.BackgroundColor = background;
+        //    Console.ForegroundColor = textcolor;
+
+        //    CenterEngine.CenterLine("================= Futó App =================");
+
+        //    Console.WriteLine();
+
+        //    for (int i = 0; i < items.Length; i++)
+        //    {
+        //        if (i == selected)
+        //            Console.ForegroundColor = highlight;
+        //        else
+        //            Console.ForegroundColor = textcolor;
+
+        //        CenterEngine.CenterLine($"{i + 1}: {items[i]}");
+        //    }
+
+        //    Console.ResetColor();
+        //}
+
+        static void DrawMenu(string[] items, int selected)
+        {
+            Console.Clear();
+
+            Console.BackgroundColor = background;
+            Console.ForegroundColor = textcolor;
+            CenterEngine.CenterLine("================= Futó App =================");
+            Console.WriteLine();
+
+            for (int i = 0; i < items.Length; i++)
+            {
+                if (i == selected)
+                {
+                    Console.BackgroundColor = highlight;
+                    Console.ForegroundColor = highlightText;
+                }
+                else
+                {
+                    Console.BackgroundColor = background;
+                    Console.ForegroundColor = textcolor;
+                }
+
+                CenterEngine.CenterLine($"{items[i]}");
+            }
+            Console.ResetColor();
+        }
+
+        /// <summary>
+        /// Megnézi hogy léteznek-e a kellő fájlok, létrehozza ha nem.
+        /// </summary>
+        static void FilesExist()
+        {
+            if (!File.Exists("Runs.json") || new FileInfo("Runs.json").Length == 0)
+            {
+                File.WriteAllText("Runs.json", "[]");
+            }
+            if (!File.Exists("User.json"))
+            {
+                File.Create("User.json").Close();
             }
         }
     }

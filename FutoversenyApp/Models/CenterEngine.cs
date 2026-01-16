@@ -88,5 +88,15 @@ namespace menu.Models
                 }
             }
         }
+
+        /// <summary>
+        /// Egy sor kiírása középre igazítva
+        /// </summary>
+        public static void CenterLine(string text)
+        {
+            int x = (Console.WindowWidth - text.Length) / 2;
+            Console.SetCursorPosition(Math.Max(0, x), Console.CursorTop);
+            Console.WriteLine(text);
+        }
     }
 }
