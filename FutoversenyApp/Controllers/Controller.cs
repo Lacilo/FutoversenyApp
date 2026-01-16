@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using FutoversenyApp.Models;
 using menu.Models;
+using FutoversenyApp;
 
 namespace FutoversenyApp.Controllers
 {
@@ -10,15 +11,14 @@ namespace FutoversenyApp.Controllers
     {
         public static void SzAdatok()
         {
-            if (new FileInfo("User.json").Length > 2)
-            {
-                CenterEngine.Show("Már meg vannak adva a személyes adatok!");
-                CenterEngine.ReadCentered("");
-                Program.Main();
-            }
+            Console.BackgroundColor = Program.background;
+            Console.Clear();
+            Console.BackgroundColor = Program.background;
+            Console.ForegroundColor = Program.textcolor;
 
-            string magassag = CenterEngine.ReadCentered("Magasság: ");
-            string tomeg = CenterEngine.ReadCentered("Tömeg: ");
+
+            string magassag = CenterEngine.ReadCentered("Magasság (cm): ");
+            string tomeg = CenterEngine.ReadCentered("Tömeg (kg): ");
             string nyugpul = CenterEngine.ReadCentered("Nyugalmi Pulzus: ");
             string celido = CenterEngine.ReadCentered("Célidő (perc): ");
             string szuldat = CenterEngine.ReadCentered("Születési Dátum (ÉÉÉÉ.HH.NN): ");
@@ -29,22 +29,71 @@ namespace FutoversenyApp.Controllers
 
             User ujUser = new User(magassag, tomeg, nyugpul, celido, szuldat);
             User.JsonWriter(ujUser);
+
+            Program.Main();
+        }
+
+        public static void SzAdatokSzerk()
+        {
+            Console.BackgroundColor = Program.background;
+            Console.Clear();
+            Console.BackgroundColor = Program.background;
+            Console.ForegroundColor = Program.textcolor;
+
+            User user = User.UserJsonReader("User.json");
+
+            string magassag = CenterEngine.ReadCentered($"Magasság ({user.Magassag}cm): ");
+            if (magassag == "")
+            {
+                magassag = user.Magassag.ToString();
+            }
+            string tomeg = CenterEngine.ReadCentered($"Tömeg ({user.Tomeg}kg): ");
+            if (tomeg == "")
+            {
+                tomeg = user.Tomeg.ToString();
+            }
+            string nyugpul = CenterEngine.ReadCentered($"Nyugalmi Pulzus ({User.Nyugpul}): ");
+            if (nyugpul == "")
+            {
+                nyugpul = User.Nyugpul.ToString();
+            }
+            string celido = CenterEngine.ReadCentered($"Célidő ({user.Celido}perc): ");
+            if (celido == "")
+            {
+                celido = user.Celido.ToString();
+            }
+            string szuldat = CenterEngine.ReadCentered($"Születési Dátum ({user.Szuldat}): ");
+            if (szuldat == "")
+            {
+                szuldat = user.Szuldat.ToString();
+            }
+            User ujUser = new User(magassag, tomeg, nyugpul, celido, szuldat);
+            User.JsonWriter(ujUser);
+
+            Program.Main();
         }
 
         public static void Edzes(List<Futas> futasok)
         {
+            Console.BackgroundColor = Program.background;
+            Console.Clear();
+            Console.BackgroundColor = Program.background;
+            Console.ForegroundColor = Program.textcolor;
+
             string datum = CenterEngine.ReadCentered("Dátum: ");
             if (datum == "")
             {
                 datum = DateTime.Now.ToString();
             }
-            string tavolsag = CenterEngine.ReadCentered("Távolság: ");
+            string tavolsag = CenterEngine.ReadCentered("Távolság (m): ");
             string idotartam = CenterEngine.ReadCentered("Időtartam (perc): ");
             string maxpulzus = CenterEngine.ReadCentered("Maximális Pulzus: ");
 
             Futas ujFutas = new Futas(datum, tavolsag, idotartam, maxpulzus);
             futasok.Add(ujFutas);
             Futas.JsonWriter(futasok);
+
+            Program.Main();
         }
 
         /// <summary>
