@@ -1,9 +1,7 @@
-﻿using System;
+﻿using FutoversenyApp.Controllers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using FutoversenyApp.Controllers;
-using FutoversenyApp;
-using System.Runtime.InteropServices;
 
 
 //TESZTELÉSHEZ:
@@ -116,6 +114,10 @@ namespace FutoversenyApp.Models
                         // Létrehozás függvény meghívása
                         break;
 
+                    case ConsoleKey.S:
+                        SortMenu();
+                        break;
+
                     case ConsoleKey.Escape:
                         exit = true;
                         Program.Menu();
@@ -131,9 +133,67 @@ namespace FutoversenyApp.Models
                 Console.WriteLine($"\n   Oldal: {page + 1} / {allPage} | Jelenlegi elem: {currentDisplay + 1}   ");
                 Console.BackgroundColor = Program.background;
                 Console.ForegroundColor = Program.textcolor;
-                Console.WriteLine("Szerkesztés: e\t Törlés: Delete\nLétrehozás: C");
+                Console.WriteLine("Szerkesztés: e\t Törlés: Delete\nLétrehozás: c\t Szortírozás beállítások: s");
                 // Console.WriteLine($"{page}\n{posOnPage}\nettől: {page*10}\njelenlegi: {currentDisplay}");
                 key = Console.ReadKey();
+            }
+        }
+
+        public void DisplaySortMenu(int cursor)
+        {
+            string[] menuPontok = { "Dátum", "Távolság", "Időtartam", "Maximum BPM" };
+
+            for (int i = 0; i < menuPontok.Length; i++)
+            {
+                if (cursor == i)
+                {
+                    Console.BackgroundColor = ConsoleColor.White;
+                    Console.ForegroundColor = ConsoleColor.Black;
+                }
+
+                Console.WriteLine(menuPontok[i]);
+
+                Console.BackgroundColor = ConsoleColor.Black;
+                Console.ForegroundColor = ConsoleColor.White;
+            }
+        }
+
+        public void SortMenu()
+        {
+            ConsoleKeyInfo key = Console.ReadKey();
+            bool exit = false;
+
+            int sortMenuCursor = 0;
+
+            DisplaySortMenu(sortMenuCursor);
+
+            while (true)
+            {
+                switch (key.Key)
+                {
+                    case ConsoleKey.DownArrow:
+                        sortMenuCursor++;
+                        if (sortMenuCursor > (Futasok.Count - 1))
+                        {
+                            sortMenuCursor = (Futasok.Count - 1);
+                        }
+                        break;
+
+                    case ConsoleKey.UpArrow:
+                        sortMenuCursor--;
+                        if (sortMenuCursor < 0)
+                        {
+                            sortMenuCursor = 0;
+                        }
+                        break;
+
+                    case ConsoleKey.Escape:
+                        exit = true;
+                        Program.Menu();
+                        break;
+                }
+
+                DisplaySortMenu(sortMenuCursor);
             }
         }
 
@@ -146,7 +206,7 @@ namespace FutoversenyApp.Models
 
             until = Math.Min(10, Futasok.Count - fromThisPos);
 
-            if(Futasok.Count() != 0)
+            if (Futasok.Count() != 0)
             {
                 for (int i = fromThisPos; i < fromThisPos + until; i++)
                 {
