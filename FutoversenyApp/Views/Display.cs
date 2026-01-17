@@ -141,7 +141,6 @@ namespace FutoversenyApp.Models
         {
             Console.BackgroundColor = Program.background;
             Console.Clear();
-            Console.WriteLine("");
 
             int until = 0;
 
@@ -155,13 +154,13 @@ namespace FutoversenyApp.Models
                     {
                         Console.ForegroundColor = Program.highlightText;
                         Console.BackgroundColor = Program.highlight;
-                        Console.Write("-> ");
+                        Console.Write("--> ");
                     }
                     else
                     {
                         Console.ForegroundColor = Program.textcolor;
                         Console.BackgroundColor = Program.background;
-                        Console.Write("   ");
+                        Console.Write("    ");
                     }
 
                     Console.WriteLine($"{Futasok[i].Datum}\t{Futasok[i].Tavolsag} méter\t{Futasok[i].Idotartam} óra\t{Futasok[i].Maxpulzus} bpm ");
