@@ -147,7 +147,7 @@ namespace FutoversenyApp.Controllers
         }
         public static Futas Min(List<Futas> futasok, char mode)
         {
-            Futas min = new Futas();
+            Futas min = futasok[0];
 
             foreach (Futas futas in futasok)
             {
@@ -189,7 +189,7 @@ namespace FutoversenyApp.Controllers
 
         public static Futas Max(List<Futas> futasok, char mode)
         {
-            Futas max = new Futas();
+            Futas max = futasok[0];
 
             foreach (Futas futas in futasok)
             {
@@ -235,14 +235,16 @@ namespace FutoversenyApp.Controllers
         /// <param name="futasok"></param>
         /// <param name="mode"></param>
         /// <returns></returns>
-        public static List<Futas> Sort(List<Futas> futasok, char mode = 'd', bool asc = true)
+        public static List<Futas> Sort(List<Futas> futasokInp, char mode = 'd', bool asc = true)
         {
+            List<Futas> futasok = new List<Futas> (futasokInp);
+
             List<Futas> sortedFutas = new List<Futas>();
             Futas maxFutas = new Futas();
 
-            for (int i = 0; i < futasok.Count; i++)
+            while (futasok.Count > 0)
             {
-                if (asc)
+                if (!asc)
                 {
                     maxFutas = Max(futasok, mode);
                     sortedFutas.Add(maxFutas);
@@ -256,7 +258,7 @@ namespace FutoversenyApp.Controllers
                 }
             }
 
-            return new List<Futas> { };
+            return sortedFutas;
         }
     }
 }

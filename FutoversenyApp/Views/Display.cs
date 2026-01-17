@@ -34,6 +34,7 @@ namespace FutoversenyApp.Models
         int posOnPage;
         int page;
         int currentDisplay = 0;
+        bool dispAsc = true;
 
         internal List<Futas> Futasok { get => futasok; set => futasok = value; }
         public int Cursor { get => cursor; set => cursor = value; }
@@ -56,13 +57,22 @@ namespace FutoversenyApp.Models
 
         public void GetDisplayInput()
         {
-            ConsoleKeyInfo key = Console.ReadKey();
             bool exit = false;
 
             int page = 0;
             int allPage = (int)(Math.Ceiling(Futasok.Count / 10.0f));
 
             DisplayFutasok(page * 10);
+            DisplayDataOfSelectedRun();
+            Console.SetCursorPosition(0, 10);
+            Console.BackgroundColor = Program.highlight;
+            Console.ForegroundColor = Program.highlightText;
+            Console.WriteLine($"\n   Oldal: {page + 1} / {allPage} | Jelenlegi elem: {currentDisplay + 1}   ");
+            Console.BackgroundColor = Program.background;
+            Console.ForegroundColor = Program.textcolor;
+            Console.WriteLine("Szerkesztés: e\t Törlés: Delete\nLétrehozás: c\t Szortírozás beállítások: s");
+
+            ConsoleKeyInfo key = Console.ReadKey();                
 
             while (true)
             {
@@ -103,6 +113,7 @@ namespace FutoversenyApp.Models
                         break;
 
                     case ConsoleKey.Delete:
+                        posOnPage = 0;
                         Controller.Torles(Futasok, currentDisplay);
                         break;
 
@@ -139,19 +150,39 @@ namespace FutoversenyApp.Models
             }
         }
 
+        public void DisplayAscEnableMenu()
+        {
+            dispAsc = !dispAsc;
+
+            Console.SetCursorPosition(85, 15);
+
+            Console.WriteLine("Növekvő sorrend");
+
+            Console.SetCursorPosition(85, 16);
+            Console.WriteLine((dispAsc ? "true" : "false"));
+        }
+
         public void DisplaySortMenu(int cursor)
         {
+            Console.SetCursorPosition(0, 15);
+            Console.Write(' ');
+
+            Console.SetCursorPosition(70, 14);
+            Console.WriteLine("=== Szortírozás beállítások ===");
+
             string[] menuPontok = { "Dátum", "Távolság", "Időtartam", "Maximum BPM" };
 
             for (int i = 0; i < menuPontok.Length; i++)
             {
+                Console.SetCursorPosition(71, 15 + i);
+
                 if (cursor == i)
                 {
                     Console.BackgroundColor = ConsoleColor.White;
                     Console.ForegroundColor = ConsoleColor.Black;
                 }
 
-                Console.WriteLine(menuPontok[i]);
+                Console.WriteLine("- " + menuPontok[i]);
 
                 Console.BackgroundColor = ConsoleColor.Black;
                 Console.ForegroundColor = ConsoleColor.White;
@@ -160,12 +191,14 @@ namespace FutoversenyApp.Models
 
         public void SortMenu()
         {
-            ConsoleKeyInfo key = Console.ReadKey();
-            bool exit = false;
-
             int sortMenuCursor = 0;
 
+            char[] modes = { 'd', 't', 'i', 'm' };
+
             DisplaySortMenu(sortMenuCursor);
+            DisplayAscEnableMenu();
+
+            ConsoleKeyInfo key = Console.ReadKey();                   
 
             while (true)
             {
@@ -187,13 +220,25 @@ namespace FutoversenyApp.Models
                         }
                         break;
 
+                    case ConsoleKey.RightArrow:
+                        DisplayAscEnableMenu();
+                        break;
+
                     case ConsoleKey.Escape:
-                        exit = true;
-                        Program.Menu();
+                        GetDisplayInput();
+                        break;
+
+                    case ConsoleKey.Enter:
+                        UpdateFutasok(Controller.Sort(Futasok, modes[sortMenuCursor], dispAsc));
+                        //Console.WriteLine($"Szortíroztam ezzel: {modes[sortMenuCursor]}, {dispAsc}");
+                        //Console.ReadKey();
+                        DisplayFutasok(0);
+                        GetDisplayInput();
                         break;
                 }
 
                 DisplaySortMenu(sortMenuCursor);
+                key = Console.ReadKey();
             }
         }
 
@@ -250,6 +295,9 @@ namespace FutoversenyApp.Models
 
             Console.SetCursorPosition(70, 6);
             Console.Write($"Legmagasabb pulzus érték: {Futasok[currentDisplay].Maxpulzus}");
+
+            Console.SetCursorPosition(70, 7);
+            Console.WriteLine("Átlag sebesség: Ide kerül majd az átlag sebesség");
         }
     }
 }
