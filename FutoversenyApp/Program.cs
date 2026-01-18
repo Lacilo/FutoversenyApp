@@ -22,6 +22,8 @@ namespace FutoversenyApp
 
         public static List<Futas> futasok = new List<Futas>();
         public static Display display = new Display();
+        public static User user = User.UserJsonReader();
+
         public static void Main()
         {
             Console.BackgroundColor = background;
@@ -105,7 +107,7 @@ namespace FutoversenyApp
                     Controller.Edzes(futasok);
                     break;
                 case 2:
-                    display.DisplayWeightAndBPMChangeMenu(new User());
+                    display.DisplayWeightAndBPMChangeMenu(user);
                     display.UpdateFutasok(futasok);
                     display.DisplayFutasok(0);
                     display.GetDisplayInput();

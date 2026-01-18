@@ -65,10 +65,18 @@ namespace FutoversenyApp.Controllers
             {
                 szuldat = user.Szuldat.ToString();
             }
-            User ujUser = new User(magassag, tomeg, nyugpul, celido, szuldat);
+            // User ujUser = new User(magassag, tomeg, nyugpul, celido, szuldat);
+            // User.JsonWriter(ujUser);
+
+            user.Magassag = int.Parse(magassag);
+            user.Tomeg = int.Parse(tomeg);
+            user.Nyugpul = int.Parse(nyugpul);
+            user.Celido = int.Parse(celido);
+            user.Szuldat = DateTime.Parse(szuldat);
             string[] adatok = { DateTime.Now.ToString(), tomeg, nyugpul };
-            ujUser.szemelyHistory.Add(adatok);
-            User.JsonWriter(ujUser);
+            user.szemelyHistory.Add(adatok);
+
+            User.JsonWriter(user);
 
             Program.Main();
         }
