@@ -284,19 +284,19 @@ namespace FutoversenyApp.Models
             Console.BackgroundColor = Program.background;
             Console.ForegroundColor = Program.textcolor;
 
-            Console.SetCursorPosition(70, 3);
+            Console.SetCursorPosition(80, 3);
             Console.Write($"Futás Dátuma: {Futasok[currentDisplay].Datum}");
 
-            Console.SetCursorPosition(70, 4);
+            Console.SetCursorPosition(80, 4);
             Console.Write($"Lefutott távolság: {Futasok[currentDisplay].Tavolsag} méter");
 
-            Console.SetCursorPosition(70, 5);
+            Console.SetCursorPosition(80, 5);
             Console.Write($"Futás Időtartama: {Futasok[currentDisplay].Idotartam}");
 
-            Console.SetCursorPosition(70, 6);
+            Console.SetCursorPosition(80, 6);
             Console.Write($"Legmagasabb pulzus érték: {Futasok[currentDisplay].Maxpulzus}");
 
-            Console.SetCursorPosition(70, 7);
+            Console.SetCursorPosition(80, 7);
             Console.WriteLine($"Átlagsebesség: {Futasok[currentDisplay].AtlagSebesseg()} km/h");
         }
     }
