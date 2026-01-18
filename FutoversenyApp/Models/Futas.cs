@@ -17,6 +17,7 @@ namespace FutoversenyApp.Models
             User user = User.UserJsonReader();
             this.Tomeg = user.Tomeg;
             this.Nyugpul = user.Nyugpul;
+
             Datum = DateTime.Parse(datum);
             Tavolsag = int.Parse(tavolsag);
             Idotartam = idotartam;

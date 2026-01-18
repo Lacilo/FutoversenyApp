@@ -66,6 +66,8 @@ namespace FutoversenyApp.Controllers
                 szuldat = user.Szuldat.ToString();
             }
             User ujUser = new User(magassag, tomeg, nyugpul, celido, szuldat);
+            string[] adatok = { DateTime.Now.ToString(), tomeg, nyugpul };
+            ujUser.szemelyHistory.Add(adatok);
             User.JsonWriter(ujUser);
 
             Program.Main();

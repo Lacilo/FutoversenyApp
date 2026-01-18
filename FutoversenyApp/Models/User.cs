@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace FutoversenyApp.Models
 {
@@ -12,7 +13,7 @@ namespace FutoversenyApp.Models
         private int nyugpul;
         private int celido;
         private DateTime szuldat;
-
+        [JsonInclude] public List<string[]> szemelyHistory;
 
         public User(string magassag, string tomeg, string nyugpul, string celido, string szuldat)
         {
@@ -21,6 +22,7 @@ namespace FutoversenyApp.Models
             Nyugpul = int.Parse(nyugpul);
             Celido = int.Parse(celido);
             Szuldat = DateTime.Parse(szuldat);
+            InitializeSzemelyHistory();
         }
 
         public User(string[] user)
@@ -30,17 +32,12 @@ namespace FutoversenyApp.Models
             Nyugpul = int.Parse(user[2]);
             Celido = int.Parse(user[3]);
             Szuldat = DateTime.Parse(user[4]);
+            InitializeSzemelyHistory();
         }
 
         public User()
         {
             
-        }
-
-        public User(int tomeg, int nyugpul)
-        {
-            Tomeg = tomeg;
-            Nyugpul = nyugpul;
         }
 
         public int Magassag { get { return magassag; } set { if (value > 0) magassag = value; } }
@@ -78,6 +75,21 @@ namespace FutoversenyApp.Models
             };
             string json = JsonSerializer.Serialize(user, options);
             File.WriteAllText("User.json", json);
+        }
+
+        public void InitializeSzemelyHistory()
+        {
+            if (szemelyHistory == null)
+            {
+                szemelyHistory = new List<string[]>();
+            }
+
+            string[] history = new string[3];
+            history[0] = DateTime.Now.ToString();
+            history[1] = Tomeg.ToString();
+            history[2] = Nyugpul.ToString();
+
+            szemelyHistory.Add(history);
         }
     }
 }

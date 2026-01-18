@@ -323,7 +323,7 @@ namespace FutoversenyApp.Models
         {
             Console.Clear();
 
-            List<string> userData = user.SzemelyHistory;
+            List<string[]> userData = user.szemelyHistory;
 
             for (int i = fromThisPos; i < until; i++)
             {
@@ -347,7 +347,7 @@ namespace FutoversenyApp.Models
             int wabpmCursor = 0;
             int start = 0;
             int until = start + 10;
-            int hossz = user.SzemelyHistory.Count;
+            int hossz = user.szemelyHistory.Count;
 
             DisplayWABPM(user, start, wabpmCursor, until);
 
