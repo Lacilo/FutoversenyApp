@@ -324,6 +324,8 @@ namespace FutoversenyApp.Models
             Console.Clear();
 
             List<string[]> userData = user.szemelyHistory;
+            
+            until = Math.Min(until, userData.Count - fromThisPos);
 
             for (int i = fromThisPos; i < until; i++)
             {
