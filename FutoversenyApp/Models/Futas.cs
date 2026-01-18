@@ -15,8 +15,8 @@ namespace FutoversenyApp.Models
         public Futas(string datum, string tavolsag, string idotartam, string maxpulzus)
         {
             User user = User.UserJsonReader();
-            this.Tomeg = user.Tomeg;
-            this.Nyugpul = user.Nyugpul;
+            Tomeg = user.Tomeg;
+            Nyugpul = user.Nyugpul;
 
             Datum = DateTime.Parse(datum);
             Tavolsag = int.Parse(tavolsag);
@@ -27,8 +27,8 @@ namespace FutoversenyApp.Models
         public Futas(string[] futas)
         {
             User user = User.UserJsonReader();
-            this.Tomeg = user.Tomeg;
-            this.Nyugpul = user.Nyugpul;
+            Tomeg = user.Tomeg;
+            Nyugpul = user.Nyugpul;
             Datum = DateTime.Parse(futas[0]);
             Tavolsag = int.Parse(futas[1]);
             Idotartam = futas[2];
@@ -42,7 +42,7 @@ namespace FutoversenyApp.Models
 
         public DateTime Datum { get { return datum; } set { if (value <= DateTime.Now) datum = value; } }
         public int Tavolsag { get { return tavolsag; } set { if (value > 0) tavolsag = value; } }
-        public string Idotartam { get => idotartam; set => idotartam = value; } // Ezzel még nem tudom mi lesz, marad így
+        public string Idotartam { get => idotartam; set => idotartam = value; }
         public int Tomeg { get; set; }
         public int Nyugpul { get; set; }
         public int Maxpulzus { get { return maxpulzus; } set { if (value > Nyugpul) maxpulzus = value; else maxpulzus = Nyugpul; } }
@@ -80,7 +80,7 @@ namespace FutoversenyApp.Models
         }
 
         /// <summary>
-        /// Kiszámolja az átlagsebességet km/h-bana a távolság és az időtartam alapján
+        /// Kiszámolja az átlagsebességet km/h-ban a a távolság és az időtartam alapján
         /// </summary>
         /// <returns>A futás objektum átlagsebességét km/h-ban</returns>
         public float AtlagSebesseg()
@@ -88,8 +88,19 @@ namespace FutoversenyApp.Models
             // óó:pp:mm, return km/h érték, / 3.6 ha m/s
             string[] ido = this.Idotartam.Split(':');
             int timeInSeconds = (int.Parse(ido[0]) * 60 * 60) + (int.Parse(ido[1]) * 60) + int.Parse(ido[2]);
-            float atlagsebesseg = (float)this.Tavolsag / (float)timeInSeconds;
-            return (float)(Math.Round(atlagsebesseg,1) * 3.6);
+            float atlagsebesseg = ((float)this.Tavolsag / (float)timeInSeconds) * 3.6f;
+            return (float)Math.Round(atlagsebesseg,1); // Kerekítsd hogy ne menjen örökké a kiírás
+        }
+
+        /// <summary>
+        /// Megnézi, hogy a felhasználó elérte-e a célidejét
+        /// </summary>
+        /// <returns>True, ha a futás átlagsebessége nagyobb, mint a cél-é; False, ha kisebb</returns>
+        public bool CelElerve()
+        {
+            User user = User.UserJsonReader();
+            float celAtlag = 5000f / ((float)user.Celido * 60f) * 3.6fs; // méter/másodperc, mivel Celido = perc, majd később vissza km/h-ba
+            return this.AtlagSebesseg() >= Math.Round(celAtlag,1);
         }
     }
 }
