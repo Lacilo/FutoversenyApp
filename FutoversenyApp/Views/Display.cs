@@ -353,13 +353,16 @@ namespace FutoversenyApp.Models
 
             DisplayWABPM(user, start, wabpmCursor, until);
 
-            Console.BackgroundColor = ConsoleColor.White;
-            Console.ForegroundColor = ConsoleColor.Black;
+            if (hossz - until > 0)
+            {
+                Console.BackgroundColor = ConsoleColor.White;
+                Console.ForegroundColor = ConsoleColor.Black;
 
-            Console.WriteLine($"\n{hossz - (until)} további");
+                Console.WriteLine($"\n{hossz - until} további");
 
-            Console.BackgroundColor = ConsoleColor.Black;
-            Console.ForegroundColor = ConsoleColor.White;
+                Console.BackgroundColor = ConsoleColor.Black;
+                Console.ForegroundColor = ConsoleColor.White;
+            }
 
             ConsoleKeyInfo key = Console.ReadKey();
 
@@ -370,6 +373,7 @@ namespace FutoversenyApp.Models
                     case ConsoleKey.DownArrow:
                         wabpmCursor++;
                         //Console.WriteLine("le");
+
                         if (wabpmCursor > 9) {
                             wabpmCursor = 9;
 
