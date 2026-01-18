@@ -79,12 +79,12 @@ namespace FutoversenyApp.Models
             File.WriteAllText("Runs.json", json);
         }
 
-        public static float AtlagSebesseg(Futas futas)
+        public float AtlagSebesseg()
         {
             // óó:pp:mm, return m/s érték, * 3.6 ha km/h
-            string[] ido = futas.Idotartam.Split(':');
+            string[] ido = this.Idotartam.Split(':');
             int timeInSeconds = (int.Parse(ido[0]) * 60 * 60) + (int.Parse(ido[1]) * 60) + int.Parse(ido[2]);
-            float atlagsebesseg = (float)futas.Tavolsag / (float)timeInSeconds;
+            float atlagsebesseg = (float)this.Tavolsag / (float)timeInSeconds;
             return atlagsebesseg;
         }
     }
