@@ -154,12 +154,16 @@ namespace FutoversenyApp.Models
         {
             dispAsc = !dispAsc;
 
-            Console.SetCursorPosition(95, 15);
+            Console.SetCursorPosition(95, 15);            
 
-            Console.WriteLine("Növekvő sorrend");
-
-            Console.SetCursorPosition(95, 16);
-            Console.WriteLine((dispAsc ? "true" : "false"));
+            if (!dispAsc)
+            {
+                Console.WriteLine("Csökkenő sorrend");
+            }
+            else
+            {
+                Console.WriteLine("Növekvő sorrend");
+            }
         }
 
         public void DisplaySortMenu(int cursor)
@@ -206,14 +210,16 @@ namespace FutoversenyApp.Models
                 {
                     case ConsoleKey.DownArrow:
                         sortMenuCursor++;
-                        if (sortMenuCursor > (Futasok.Count - 1))
+                        //Console.WriteLine("le");
+                        if (sortMenuCursor > (modes.Length - 1))
                         {
-                            sortMenuCursor = (Futasok.Count - 1);
+                            sortMenuCursor = (modes.Length - 1);
                         }
                         break;
 
                     case ConsoleKey.UpArrow:
                         sortMenuCursor--;
+                        //Console.WriteLine("fel");
                         if (sortMenuCursor < 0)
                         {
                             sortMenuCursor = 0;
@@ -238,6 +244,7 @@ namespace FutoversenyApp.Models
                 }
 
                 DisplaySortMenu(sortMenuCursor);
+                //Console.WriteLine(sortMenuCursor);
                 key = Console.ReadKey();
             }
         }
